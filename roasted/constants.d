@@ -7,10 +7,6 @@
   */
 module roasted.constants;
 
-import roasted.resolvables;
-
-import std.typecons;
-
 /// An object that has been evaluated at CT.
 interface Constant {
   

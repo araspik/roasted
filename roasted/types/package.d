@@ -25,6 +25,7 @@ module roasted.types;
 
 import roasted.declarations;
 import roasted.symbols;
+import roasted.scopes;
 
 import std.typecons;
 
@@ -51,9 +52,20 @@ class Type: Declaration {
 
   //- Functions ----------------------------------------//
 
+  /**** Constructor.
+    * 
+    * Only for deriving types.
+    */
+  protected this(Symbol name,
+      Nullable!(Scope, null) context = null) {
+    super(name, context);
+  }
+
   /**** Exposes properties of the type as declarations.
     * 
     * 'null' indicates that the property does not exist.
     */
-  Nullable!(const(Declaration), null) opIndex(string prop)        const;
+  Nullable!(const(Declaration), null) opIndex(dstring prop) 
+         const;
+
 }

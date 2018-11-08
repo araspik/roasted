@@ -37,6 +37,14 @@ interface Scope {
     */
   inout(Declaration[]) decls() inout;
 
+  /**** The path of this scope.
+    * 
+    * All scopes define a path to locate them, and the
+    * declarations under these scopes use these paths to
+    * identify themselves uniquely.
+    */
+  dstring path() const;
+
  }
 
   //- Functions ----------------------------------------//

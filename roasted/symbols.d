@@ -23,6 +23,13 @@ final class Symbol {
 
  @safe nothrow pure :
 
+  /**** Constructor.
+    * 
+    */
+  this(dstring ident) {
+    this.ident = ident;
+  }
+
   /**** Locates a matching declaration given a scope.
     * 
     */

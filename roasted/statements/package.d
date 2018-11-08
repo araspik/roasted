@@ -8,13 +8,13 @@
 module roasted.statements;
 
 import roasted.constants;
-import roasted.resolvables;
+import roasted.evaluables;
 import roasted.scopes;
 
 import std.typecons;
 
 /// Defines single declarations or actions.
-class Statement: Resolvable {
+class Statement: Evaluable {
 
   /**** Context of the statement.
     * 
@@ -36,11 +36,26 @@ class Statement: Resolvable {
 
   //- Functions ----------------------------------------//
 
+  /**** Constructor.
+    * 
+    * Only for deriving classes.
+    */
+  protected this(Nullable!(Scope, null) context = null) {
+    this.context = context;
+  }
+
   /**** Attempts to evaluate the object.
     * 
     */
   Nullable!(Constant, null) eval() {
     return typeof(return)();
+  }
+
+  /**** Stringifier.
+    * 
+    */
+  dstring toStr() const {
+    return "";
   }
 
 }

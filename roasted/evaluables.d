@@ -1,8 +1,8 @@
-/**** Resolvable: Compile-time resolvable objects.
+/**** Evaluable: Compile-time evaluable objects.
   * 
-  * Objects which are compile-time resolvable by nature (e.g
+  * Objects which are compile-time evaluable by nature (e.g
   * templates) are called "static", and objects which are
-  * not _necessarily_ resolvable at compile time but can be
+  * not _necessarily_ evaluable at compile time but can be
   * in certain contexts are called "CT evaluatable". This
   * interface provides functions designed to test for and
   * evaluate these objects.
@@ -10,7 +10,7 @@
   * Author: ARaspiK
   * License: MIT
   */
-module roasted.resolvables;
+module roasted.evaluables;
 
 import roasted.constants;
 
@@ -23,8 +23,8 @@ enum Evalness {
   full,   /// Static objects.
 }
 
-/// Compile-time resolvable objects.
-interface Resolvable {
+/// Compile-time evaluable objects.
+interface Evaluable {
 
   //- Properties ---------------------------------------//
 
@@ -32,7 +32,7 @@ interface Resolvable {
 
  @property {
 
-  /// Returns the evaluatability of the object.
+  /// Returns the evaluability of the object.
   Evalness evalable() const;
 
  }

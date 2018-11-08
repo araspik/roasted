@@ -15,6 +15,9 @@ module roasted.declarations;
 
 import roasted.statements;
 import roasted.symbols;
+import roasted.scopes;
+
+import std.typecons;
 
 /// Provides a system for declaring new things.
 class Declaration: Statement {
@@ -32,10 +35,38 @@ class Declaration: Statement {
 
   alias evalable = Statement.evalable;
 
+  /**** The path to the declaration.
+    * 
+    * This is an unambiguous name for the declaration, even
+    * among modules (as module path is included).
+    */
+  dstring path() const {
+    return (context.apply!(sc => sc.path ~ '.').get(""d)
+      ~ name.ident).idup;
+  }
+
  }
 
   //- Functions ----------------------------------------//
 
+  /**** Constructor.
+    * 
+    * Only for deriving classes.
+    */
+  protected this(Symbol name,
+        Nullable!(Scope, null) context = null) {
+    super(context);
+    this.name = name;
+  }
+
   alias eval = Statement.eval;
+
+  /**** Stringifier.
+    * 
+    * Returns the declaration name.
+    */
+  override dstring toStr() const {
+    return name.ident;
+  }
 
 }
