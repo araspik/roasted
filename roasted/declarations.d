@@ -1,72 +1,81 @@
-/**** Declarations: A system for creating new things.
+/**** Declarations: Statements which define new symbols.
   * 
-  * They are statements which create new objects, like
-  * functions, variables, types, etc.
+  * Declarations declare (and in most cases also define) a
+  * new symbol that is to be accessible to everything at the
+  * current scope.
   * 
-  * All declarations consist of at least these things:
-  * 1. A symbol, defining how to refer to the declaration.
+  * Declarations create objects such as functions,
+  * variables, and types.
   * 
-  * All declarations are parsable and resolvable.
+  * Declarations are statements. They know the scope at
+  * which they were declared.
   * 
   * Author: ARaspiK
   * License: MIT
   */
 module roasted.declarations;
 
-import roasted.statements;
-import roasted.symbols;
 import roasted.scopes;
+import roasted.statements;
+import roasted.types;
 
-import std.typecons;
+import utils.maybe;
 
-/// Provides a system for declaring new things.
-class Declaration: Statement {
+/// Statements which define new symbols.
+abstract class Declaration: Statement {
 
-  /**** The symbol, which can be used to refer to the
-    * declaration.
-    */
-  Symbol name;
+  /// The name of the declaration.
+  string name;
+
+  /// The type of the declaration.
+  /// If the type is nonexistent, then the declaration is a
+  /// type itself.
+  Maybe!Type type;
 
   //- Properties ---------------------------------------//
 
- @safe nothrow pure :
+ @safe nothrow pure:
 
  @property {
 
-  alias evalable = Statement.evalable;
-
   /**** The path to the declaration.
     * 
-    * This is an unambiguous name for the declaration, even
-    * among modules (as module path is included).
+    * This provides a way to refer to the declaration 
+    * unambiguously.
     */
-  dstring path() const {
-    return (context.apply!(sc => sc.path ~ '.').get(""d)
-      ~ name.ident).idup;
+  string path() const {
+    return (context.maybe.apply!(c => c.path ~ '.').get("")
+      ~ name).idup;
   }
 
  }
 
+}
+
+/**** Compile-time declarations.
+  * 
+  * These declarations simply reference expressions known at
+  * compile time and can be used for anything that is
+  * specifically known at compile time. This includes items
+  * like type property declarations.
+  * 
+  * These cannot be modified.
+  */
+class ConstantDecl: Declaration {
+  import roasted.expressions;
+
+  Expression exp;
+
   //- Functions ----------------------------------------//
 
-  /**** Constructor.
-    * 
-    * Only for deriving classes.
-    */
-  protected this(Symbol name,
-        Nullable!(Scope, null) context = null) {
-    super(context);
+ @safe nothrow pure:
+
+  /// Constructor.
+  this(Scope context, string name, Expression exp) {
+    this.context = context;
     this.name = name;
-  }
-
-  alias eval = Statement.eval;
-
-  /**** Stringifier.
-    * 
-    * Returns the declaration name.
-    */
-  override dstring toStr() const {
-    return name.ident;
+    this.type = exp.type;
+    this.exp = exp;
   }
 
 }
