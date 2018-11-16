@@ -1,0 +1,10 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: wild/archlinux-dlang:latest
+    steps:
+      - checkout
+      - run:
+          name: Building with DUB
+          command: dub build
